@@ -1,0 +1,29 @@
+package com.analogo;
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.image.*;
+import javax.swing.*;
+import javax.swing.event.*;
+import java.util.*;
+
+public class RelojProyecto extends JFrame{
+    public static void main(String[] args) {
+        RelojProyecto app = new RelojProyecto();
+        app.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+ 
+    Reloj Cara;
+ 
+    public RelojProyecto() {
+        super( "Reloj Proyecto" );
+        setVisible( true );
+        setResizable( false );
+        Container content = this.getContentPane();
+        content.setLayout(new BorderLayout());
+        Cara = new Reloj();
+        content.add(Cara, BorderLayout.CENTER);
+        this.pack();
+ 
+        Cara.start();
+    }
+}
