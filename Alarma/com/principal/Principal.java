@@ -65,8 +65,3 @@ public final class Principal extends JFrame implements ActionListener {
         op.getHora();
     }
 }
-/*
-mvn clean package
-java -cp target/alarma-1.jar com.alarma.Principal
-
-*/
