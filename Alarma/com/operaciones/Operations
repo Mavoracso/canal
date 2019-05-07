@@ -1,0 +1,85 @@
+package com.operaciones;
+
+import com.alarma.Principal;
+import java.util.Calendar;
+
+public class Operations implements Runnable{
+	Principal p;
+
+	public Operations( Principal p ){
+		this.p = p;
+	}
+
+	public void getHora(){
+		run();
+	}
+
+	@Override
+	public void run(){
+		 Calendar calen = Calendar.getInstance();
+        long lastTime = System.nanoTime();
+        double unprocessed = 0;
+        double nsPerTick = 1000000000.0/60;
+        int frames = 0;
+        int ticks = 0;
+        long lastTimer1 = System.currentTimeMillis();
+        while( true ){
+            long now = System.nanoTime();
+            unprocessed += ( now - lastTime) / nsPerTick;
+            lastTime = now;
+            boolean shouldRender = true;
+            while( unprocessed >= 1 ){
+                ticks ++;
+                unprocessed -= 1;
+                shouldRender = true;
+            }
+            try{
+                Thread.sleep( 2 );
+            }catch( InterruptedException e ){
+                System.err.println( e.getMessage() );
+            }
+            if( shouldRender ){
+                frames ++;
+                calen = Calendar.getInstance();
+                p.lblReloj.setText( fechaActual(calen) );
+				/*+ ":" +  calen.get(Calendar.MILLISECOND)*/
+            }
+            if( System.currentTimeMillis() - lastTimer1 > 1000 ){
+                System.out.println( "Frames & ticks [ " + frames + "," + ticks + "]");
+                lastTimer1 += 1000;
+                frames = 0;
+                ticks = 0;
+            }
+        }
+	}
+    public String fechaActual(Calendar calen ){
+        String dia =  calen.get( Calendar.DAY_OF_MONTH ) +""; dia = ( Integer.parseInt( dia ) < 10 )? "0" + dia: dia;
+        String mes =  calen.get( Calendar.MONTH ) +""; mes = ( Integer.parseInt( mes ) < 10 )? "0" + mes: mes;
+        int hora_ = calen.get(Calendar.HOUR_OF_DAY );
+        int minuto_ = calen.get( Calendar.MINUTE );
+        int segundo_ = calen.get( Calendar.SECOND );
+        String fecha = dias(calen.get( Calendar.DAY_OF_WEEK) ) + " " + 
+            dia + " de " + 
+            mesAn( Integer.parseInt( mes ) ) + " del " + 
+            calen.get( Calendar.YEAR ) + " " +
+            hora_ + ":" + minuto_+":" + segundo_ ;
+
+        if( p.chkActive.isSelected() ){
+            if( p._hora > -1 && p._minuto > -1 && p._segundo > -1 ){
+                if( ( hora_ == p._hora ) && (minuto_ == p._minuto) && (segundo_ == p._segundo) ){
+                    System.out.println( "esta sonando" );
+                    p.estaSonando = !true;
+                }
+            }
+        }
+        return fecha;
+    }
+    public String dias(int dia ){
+        String[] semana = { "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo" };
+        return semana[ dia ];
+    }
+    public String mesAn( int mes ){
+        String[] mesAnio = { "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" };
+        return mesAnio[ mes ];
+    }
+}
