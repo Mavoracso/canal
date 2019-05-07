@@ -1,0 +1,91 @@
+package com.operaciones;
+
+import com.alarma.Principal;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+
+public class SetAlarma extends JFrame implements ActionListener {
+
+    private JComboBox hora;
+    private JComboBox minutos;
+    private JComboBox segundos;
+    Principal p;
+    
+    public SetAlarma(Principal p) {
+        this.p = p;
+        elements();
+    }
+
+    public void elements() {
+        this.setTitle("Seteo de alarma");
+        this.setSize(300, 100);
+        this.setLayout(null);
+        this.setResizable(false);
+        this.setLocationRelativeTo(null);
+
+        hora = new JComboBox();
+        minutos = new JComboBox();
+        segundos = new JComboBox();
+        for (int i = 0; i < 24; i++) {
+            if (i < 10) {
+                hora.addItem("0" + i);
+            } else {
+                hora.addItem(i + "");
+            }
+        }
+        for (int i = 0; i < 60; i++) {
+            if (i < 10) {
+                minutos.addItem("0" + i);
+                segundos.addItem("0" + i);
+            } else {
+                minutos.addItem(i + "");
+                segundos.addItem(i + "");
+            }
+        }
+        hora.addActionListener(this);
+        hora.setActionCommand("hora");
+        minutos.addActionListener(this);
+        minutos.setActionCommand("minuto");
+        segundos.addActionListener(this);
+        segundos.setActionCommand("segundo");
+        if( p._hora>-1 ){
+            String h = "";
+            if( p._hora < 10 ){h = "0"+p._hora;}else{ h = p._hora + "";}
+            hora.setSelectedItem(h);
+        }
+        if( p._minuto>-1 ){
+            String m = "";
+            if( p._minuto < 10 ){m = "0"+p._minuto;}else{ m = p._minuto + "";}
+            minutos.setSelectedItem(m);
+        }
+        if( p._segundo>-1 ){
+            String s = "";
+            if( p._segundo < 10 ){s= "0"+p._segundo;}else{ s= p._segundo + "";}
+            segundos.setSelectedItem(s);
+        }
+        hora.setBounds(5, 5, 50, 25);
+        minutos.setBounds(60, 5, 50, 25);
+        segundos.setBounds(115, 5, 50, 25);
+        this.add(hora);
+        this.add(minutos);
+        this.add(segundos);
+
+        this.setVisible(true);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if( "hora".equals(e.getActionCommand() ) ){
+            p._hora = Integer.parseInt( hora.getSelectedItem().toString() );
+        }
+        if( "minuto".equals(e.getActionCommand() ) ){
+            p._minuto = Integer.parseInt( minutos.getSelectedItem().toString() );
+        }
+        if( "segundo".equals(e.getActionCommand() ) ){
+            p._segundo = Integer.parseInt( segundos.getSelectedItem().toString() );
+        }
+    }
+
+}
