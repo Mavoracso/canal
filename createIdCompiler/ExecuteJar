@@ -1,0 +1,34 @@
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+public class ExecuteJar {
+
+    @SuppressWarnings("empty-statement")
+    public void ejecuta() {
+        PrintWriter writer;
+        try {
+            String nombre = "archivo.bat";
+            writer = new PrintWriter(nombre, "UTF-8");
+            writer.println("cd \"C:\\java\\alarma\\ ");
+            writer.println("java -cp target\\alarma-1.jar com.alarma.Principal");
+            writer.close();
+            String[] command = {"cmd.exe", "/C", "Start", "archivo.bat"};
+            BufferedReader br = new BufferedReader( new InputStreamReader( ( Runtime.getRuntime().exec(command) ).getErrorStream() ) );
+            String line = null;
+            while ((line = br.readLine()) != null) {
+                System.err.println("Error.line: " + line);
+            }
+        } catch (FileNotFoundException | UnsupportedEncodingException ex) {
+            Logger.getLogger(Compilador.class.getName()).log(Level.SEVERE, null, ex.getMessage());
+        } catch (IOException ex) {
+            Logger.getLogger(Compilador.class.getName()).log(Level.SEVERE, null, ex.getMessage());
+        }
+    }
+}
